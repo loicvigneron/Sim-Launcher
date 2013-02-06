@@ -31,22 +31,22 @@ class Simulator
 
   end
 
-  def launch_ios_app(app_path, sdk_version, device_family, app_args = nil)
+  def launch_ios_app(app_path, sdk_version, device_family, std_out, std_err, app_args = nil)
     if problem = SimLauncher.check_app_path( app_path )
       bangs = '!'*80
       raise "\n#{bangs}\nENCOUNTERED A PROBLEM WITH THE SPECIFIED APP PATH:\n\n#{problem}\n#{bangs}"
     end
     sdk_version ||= SdkDetector.new(self).latest_sdk_version
     args = ["--args"] + app_args.flatten if app_args
-    run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit', *args )
+    run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--stdout', stdout, '--stderr', stderr '--exit', *args )
   end
 
-  def launch_ipad_app( app_path, sdk )
-    launch_ios_app( app_path, sdk, 'ipad' )
+  def launch_ipad_app( app_path, sdk, std_out, std_err )
+    launch_ios_app( app_path, sdk, 'ipad', std_out, std_err )
   end
 
-  def launch_iphone_app( app_path, sdk )
-    launch_ios_app( app_path, sdk, 'iphone' )
+  def launch_iphone_app( app_path, sdk, std_out, std_err )
+    launch_ios_app( app_path, sdk, 'iphone', std_out, std_err )
   end
 
   def quit_simulator
